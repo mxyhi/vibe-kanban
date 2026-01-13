@@ -53,7 +53,6 @@ impl StandardCodingAgentExecutor for QaMockExecutor {
             .await
             .map_err(|e| ExecutorError::Io(std::io::Error::other(e)))?;
 
-
         // 3. Create shell script that reads file and outputs with delays
         // Using IFS= read -r to preserve exact content (no word splitting, no backslash interpretation)
         let script = format!(
