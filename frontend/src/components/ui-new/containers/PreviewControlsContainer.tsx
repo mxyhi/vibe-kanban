@@ -3,24 +3,26 @@ import { PreviewControls } from '../views/PreviewControls';
 import { usePreviewDevServer } from '../hooks/usePreviewDevServer';
 import { useLogStream } from '@/hooks/useLogStream';
 import {
-  useWorkspacePanelState,
+  useUiPreferencesStore,
   RIGHT_MAIN_PANEL_MODES,
 } from '@/stores/useUiPreferencesStore';
 import { useWorkspaceContext } from '@/contexts/WorkspaceContext';
 import { useLogsPanel } from '@/contexts/LogsPanelContext';
 
 interface PreviewControlsContainerProps {
-  attemptId?: string;
-  className?: string;
+  attemptId: string;
+  className: string;
 }
 
 export function PreviewControlsContainer({
   attemptId,
   className,
 }: PreviewControlsContainerProps) {
-  const { repos, workspaceId } = useWorkspaceContext();
+  const { repos } = useWorkspaceContext();
   const { viewProcessInPanel } = useLogsPanel();
-  const { setRightMainPanelMode } = useWorkspacePanelState(workspaceId);
+  const setRightMainPanelMode = useUiPreferencesStore(
+    (s) => s.setRightMainPanelMode
+  );
 
   const { isStarting, runningDevServers, devServerProcesses } =
     usePreviewDevServer(attemptId);
