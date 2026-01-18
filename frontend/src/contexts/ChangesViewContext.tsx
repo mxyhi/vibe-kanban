@@ -6,7 +6,7 @@ import React, {
   useMemo,
 } from 'react';
 import {
-  useWorkspacePanelState,
+  useUiPreferencesStore,
   RIGHT_MAIN_PANEL_MODES,
 } from '@/stores/useUiPreferencesStore';
 import { useWorkspaceContext } from '@/contexts/WorkspaceContext';
@@ -47,10 +47,10 @@ interface ChangesViewProviderProps {
 }
 
 export function ChangesViewProvider({ children }: ChangesViewProviderProps) {
-  const { diffPaths, workspaceId } = useWorkspaceContext();
+  const { diffPaths } = useWorkspaceContext();
   const [selectedFilePath, setSelectedFilePath] = useState<string | null>(null);
   const [fileInView, setFileInView] = useState<string | null>(null);
-  const { setRightMainPanelMode } = useWorkspacePanelState(workspaceId);
+  const { setRightMainPanelMode } = useUiPreferencesStore();
 
   const selectFile = useCallback((path: string) => {
     setSelectedFilePath(path);
