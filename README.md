@@ -1,14 +1,3 @@
-## About This Fork
-
-This is a fork of [BloopAI/vibe-kanban](https://github.com/BloopAI/vibe-kanban). The upstream repository is configured as a remote for easy synchronization with the latest changes.
-
-### Local Modifications
-
-- **PR Title Fix**: Removed "vibe-kanban" suffix from auto-generated PR titles for cleaner commit history
-  - See commit: `9e2bade9` (fix: remove vibe-kanban suffix from auto-generated PR titles)
-
----
-
 <p align="center">
   <a href="https://vibekanban.com">
     <picture>
@@ -21,8 +10,9 @@ This is a fork of [BloopAI/vibe-kanban](https://github.com/BloopAI/vibe-kanban).
 
 <p align="center">Get 10X more out of Claude Code, Gemini CLI, Codex, Amp and other coding agents...</p>
 <p align="center">
-  <a href="https://www.npmjs.com/package/@mxyhi/vibe-kanban"><img alt="npm" src="https://img.shields.io/npm/v/@mxyhi%2Fvibe-kanban?style=flat-square" /></a>
-  <a href="https://github.com/mxyhi/vibe-kanban/blob/main/.github/workflows/test.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/mxyhi/vibe-kanban/test.yml?style=flat-square" /></a>
+  <a href="https://www.npmjs.com/package/vibe-kanban"><img alt="npm" src="https://img.shields.io/npm/v/vibe-kanban?style=flat-square" /></a>
+  <a href="https://github.com/BloopAI/vibe-kanban/blob/main/.github/workflows/publish.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/BloopAI/vibe-kanban/.github%2Fworkflows%2Fpublish.yml" /></a>
+  <a href="https://deepwiki.com/BloopAI/vibe-kanban"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
 </p>
 
 <h1 align="center">
@@ -49,7 +39,7 @@ You can watch a video overview [here](https://youtu.be/TFT3KnZOOAk).
 Make sure you have authenticated with your favourite coding agent. A full list of supported coding agents can be found in the [docs](https://vibekanban.com/docs). Then in your terminal run:
 
 ```bash
-npx @mxyhi/vibe-kanban
+npx vibe-kanban
 ```
 
 ## Documentation
@@ -58,11 +48,11 @@ Please head to the [website](https://vibekanban.com/docs) for the latest documen
 
 ## Support
 
-We use [GitHub Discussions](https://github.com/mxyhi/vibe-kanban/discussions) for feature requests. Please open a discussion to create a feature request. For bugs please open an issue on this repo.
+We use [GitHub Discussions](https://github.com/BloopAI/vibe-kanban/discussions) for feature requests. Please open a discussion to create a feature request. For bugs please open an issue on this repo.
 
 ## Contributing
 
-We would prefer that ideas and changes are first raised with the core team via [GitHub Discussions](https://github.com/mxyhi/vibe-kanban/discussions) or [Discord](https://discord.gg/AC4nwVtJM3), where we can discuss implementation details and alignment with the existing roadmap. Please do not open PRs without first discussing your proposal with the team.
+We would prefer that ideas and changes are first raised with the core team via [GitHub Discussions](https://github.com/BloopAI/vibe-kanban/discussions) or [Discord](https://discord.gg/AC4nwVtJM3), where we can discuss implementation details and alignment with the existing roadmap. Please do not open PRs without first discussing your proposal with the team.
 
 ## Development
 
@@ -73,14 +63,12 @@ We would prefer that ideas and changes are first raised with the core team via [
 - [pnpm](https://pnpm.io/) (>=8)
 
 Additional development tools:
-
 ```bash
 cargo install cargo-watch
 cargo install sqlx-cli
 ```
 
 Install dependencies:
-
 ```bash
 pnpm i
 ```
@@ -107,23 +95,39 @@ pnpm build
 1. Run `./local-build.sh`
 2. Test with `cd npx-cli && node bin/cli.js`
 
+
 ### Environment Variables
 
 The following environment variables can be configured at build time or runtime:
 
-| Variable                          | Type       | Default           | Description                                                                                           |
-| --------------------------------- | ---------- | ----------------- | ----------------------------------------------------------------------------------------------------- |
-| `POSTHOG_API_KEY`                 | Build-time | Empty             | PostHog analytics API key (disables analytics if empty)                                               |
-| `POSTHOG_API_ENDPOINT`            | Build-time | Empty             | PostHog analytics endpoint (disables analytics if empty)                                              |
-| `PORT`                            | Runtime    | Auto-assign       | **Production**: Server port. **Dev**: Frontend port (backend uses PORT+1)                             |
-| `BACKEND_PORT`                    | Runtime    | `0` (auto-assign) | Backend server port (dev mode only, overrides PORT+1)                                                 |
-| `FRONTEND_PORT`                   | Runtime    | `3000`            | Frontend dev server port (dev mode only, overrides PORT)                                              |
-| `HOST`                            | Runtime    | `127.0.0.1`       | Backend server host                                                                                   |
-| `MCP_HOST`                        | Runtime    | Value of `HOST`   | MCP server connection host (use `127.0.0.1` when `HOST=0.0.0.0` on Windows)                            |
-| `MCP_PORT`                        | Runtime    | Value of `BACKEND_PORT` | MCP server connection port                                                                       |
-| `DISABLE_WORKTREE_ORPHAN_CLEANUP` | Runtime    | Not set           | Disable git worktree cleanup (for debugging)                                                          |
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `POSTHOG_API_KEY` | Build-time | Empty | PostHog analytics API key (disables analytics if empty) |
+| `POSTHOG_API_ENDPOINT` | Build-time | Empty | PostHog analytics endpoint (disables analytics if empty) |
+| `PORT` | Runtime | Auto-assign | **Production**: Server port. **Dev**: Frontend port (backend uses PORT+1) |
+| `BACKEND_PORT` | Runtime | `0` (auto-assign) | Backend server port (dev mode only, overrides PORT+1) |
+| `FRONTEND_PORT` | Runtime | `3000` | Frontend dev server port (dev mode only, overrides PORT) |
+| `HOST` | Runtime | `127.0.0.1` | Backend server host |
+| `MCP_HOST` | Runtime | Value of `HOST` | MCP server connection host (use `127.0.0.1` when `HOST=0.0.0.0` on Windows) |
+| `MCP_PORT` | Runtime | Value of `BACKEND_PORT` | MCP server connection port |
+| `DISABLE_WORKTREE_ORPHAN_CLEANUP` | Runtime | Not set | Disable git worktree cleanup (for debugging) |
+| `VK_ALLOWED_ORIGINS` | Runtime | Not set | Comma-separated list of origins that are allowed to make backend API requests (e.g., `https://my-vibekanban-frontend.com`) |
 
 **Build-time variables** must be set when running `pnpm run build`. **Runtime variables** are read when the application starts.
+
+#### Self-Hosting with a Reverse Proxy or Custom Domain
+
+When running Vibe Kanban behind a reverse proxy (e.g., nginx, Caddy, Traefik) or on a custom domain, you must set the `VK_ALLOWED_ORIGINS` environment variable. Without this, the browser's Origin header won't match the backend's expected host, and API requests will be rejected with a 403 Forbidden error.
+
+Set it to the full origin URL(s) where your frontend is accessible:
+
+```bash
+# Single origin
+VK_ALLOWED_ORIGINS=https://vk.example.com
+
+# Multiple origins (comma-separated)
+VK_ALLOWED_ORIGINS=https://vk.example.com,https://vk-staging.example.com
+```
 
 ### Remote Deployment
 
