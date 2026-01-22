@@ -1,7 +1,3 @@
-import BranchSelector from '@/components/tasks/BranchSelector';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Dialog,
   DialogContent,
@@ -10,29 +6,33 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea.tsx';
-import { attemptsApi } from '@/lib/api.ts';
 import { Label } from '@radix-ui/react-label';
+import { Textarea } from '@/components/ui/textarea.tsx';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import BranchSelector from '@/components/tasks/BranchSelector';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { attemptsApi } from '@/lib/api.ts';
 import { useTranslation } from 'react-i18next';
 
-import { useUserSystem } from '@/components/ConfigProvider';
-import type {
-  GhCliSupportContent,
-  GhCliSupportVariant,
-} from '@/components/dialogs/auth/GhCliSetupDialog';
+import { TaskWithAttemptStatus, Workspace } from 'shared/types';
+import { Loader2 } from 'lucide-react';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import { useAuth, useRepoBranches } from '@/hooks';
 import {
   GhCliHelpInstructions,
   GhCliSetupDialog,
   mapGhCliErrorToUi,
 } from '@/components/dialogs/auth/GhCliSetupDialog';
-import { useAuth, useRepoBranches } from '@/hooks';
-import { defineModal } from '@/lib/modals';
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
-import { Loader2 } from 'lucide-react';
+import type {
+  GhCliSupportContent,
+  GhCliSupportVariant,
+} from '@/components/dialogs/auth/GhCliSetupDialog';
 import type { GhCliSetupError } from 'shared/types';
-import { TaskWithAttemptStatus, Workspace } from 'shared/types';
+import { useUserSystem } from '@/components/ConfigProvider';
+import { defineModal } from '@/lib/modals';
 
 interface CreatePRDialogProps {
   attempt: Workspace;
@@ -81,7 +81,7 @@ const CreatePRDialogImpl = NiceModal.create<CreatePRDialogProps>(
         return;
       }
 
-      setPrTitle(task.title);
+      setPrTitle(`${task.title} (vibe-kanban)`);
       setPrBody(task.description || '');
       setError(null);
       setGhCliHelp(null);
