@@ -39,7 +39,7 @@ You can watch a video overview [here](https://youtu.be/TFT3KnZOOAk).
 Make sure you have authenticated with your favourite coding agent. A full list of supported coding agents can be found in the [docs](https://vibekanban.com/docs). Then in your terminal run:
 
 ```bash
-npx vibe-kanban
+npx @mxyhi/vibe-kanban
 ```
 
 ## Documentation
@@ -63,12 +63,14 @@ We would prefer that ideas and changes are first raised with the core team via [
 - [pnpm](https://pnpm.io/) (>=8)
 
 Additional development tools:
+
 ```bash
 cargo install cargo-watch
 cargo install sqlx-cli
 ```
 
 Install dependencies:
+
 ```bash
 pnpm i
 ```
@@ -95,23 +97,22 @@ pnpm build
 1. Run `./local-build.sh`
 2. Test with `cd npx-cli && node bin/cli.js`
 
-
 ### Environment Variables
 
 The following environment variables can be configured at build time or runtime:
 
-| Variable | Type | Default | Description |
-|----------|------|---------|-------------|
-| `POSTHOG_API_KEY` | Build-time | Empty | PostHog analytics API key (disables analytics if empty) |
-| `POSTHOG_API_ENDPOINT` | Build-time | Empty | PostHog analytics endpoint (disables analytics if empty) |
-| `PORT` | Runtime | Auto-assign | **Production**: Server port. **Dev**: Frontend port (backend uses PORT+1) |
-| `BACKEND_PORT` | Runtime | `0` (auto-assign) | Backend server port (dev mode only, overrides PORT+1) |
-| `FRONTEND_PORT` | Runtime | `3000` | Frontend dev server port (dev mode only, overrides PORT) |
-| `HOST` | Runtime | `127.0.0.1` | Backend server host |
-| `MCP_HOST` | Runtime | Value of `HOST` | MCP server connection host (use `127.0.0.1` when `HOST=0.0.0.0` on Windows) |
-| `MCP_PORT` | Runtime | Value of `BACKEND_PORT` | MCP server connection port |
-| `DISABLE_WORKTREE_ORPHAN_CLEANUP` | Runtime | Not set | Disable git worktree cleanup (for debugging) |
-| `VK_ALLOWED_ORIGINS` | Runtime | Not set | Comma-separated list of origins that are allowed to make backend API requests (e.g., `https://my-vibekanban-frontend.com`) |
+| Variable                          | Type       | Default                 | Description                                                                                                                |
+| --------------------------------- | ---------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `POSTHOG_API_KEY`                 | Build-time | Empty                   | PostHog analytics API key (disables analytics if empty)                                                                    |
+| `POSTHOG_API_ENDPOINT`            | Build-time | Empty                   | PostHog analytics endpoint (disables analytics if empty)                                                                   |
+| `PORT`                            | Runtime    | Auto-assign             | **Production**: Server port. **Dev**: Frontend port (backend uses PORT+1)                                                  |
+| `BACKEND_PORT`                    | Runtime    | `0` (auto-assign)       | Backend server port (dev mode only, overrides PORT+1)                                                                      |
+| `FRONTEND_PORT`                   | Runtime    | `3000`                  | Frontend dev server port (dev mode only, overrides PORT)                                                                   |
+| `HOST`                            | Runtime    | `127.0.0.1`             | Backend server host                                                                                                        |
+| `MCP_HOST`                        | Runtime    | Value of `HOST`         | MCP server connection host (use `127.0.0.1` when `HOST=0.0.0.0` on Windows)                                                |
+| `MCP_PORT`                        | Runtime    | Value of `BACKEND_PORT` | MCP server connection port                                                                                                 |
+| `DISABLE_WORKTREE_ORPHAN_CLEANUP` | Runtime    | Not set                 | Disable git worktree cleanup (for debugging)                                                                               |
+| `VK_ALLOWED_ORIGINS`              | Runtime    | Not set                 | Comma-separated list of origins that are allowed to make backend API requests (e.g., `https://my-vibekanban-frontend.com`) |
 
 **Build-time variables** must be set when running `pnpm run build`. **Runtime variables** are read when the application starts.
 
