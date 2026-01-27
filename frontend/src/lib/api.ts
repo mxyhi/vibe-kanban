@@ -47,6 +47,7 @@ import {
   CheckEditorAvailabilityResponse,
   AvailabilityInfo,
   BaseCodingAgent,
+  ExecutorProfileId,
   RunAgentSetupRequest,
   RunAgentSetupResponse,
   GhCliSetupError,
@@ -88,6 +89,12 @@ import {
   Workspace,
   StartReviewRequest,
   ReviewError,
+  OpenPrInfo,
+  GitRemote,
+  ListPrsError,
+  CreateWorkspaceFromPrBody,
+  CreateWorkspaceFromPrResponse,
+  CreateFromPrError,
 } from 'shared/types';
 import type { WorkspaceWithSession } from '@/types/attempt';
 import { createWorkspaceWithSession } from '@/types/attempt';
@@ -757,6 +764,20 @@ export const attemptsApi = {
     );
     return handleApiResponse<void>(response);
   },
+
+  /** Create a workspace directly from a pull request */
+  createFromPr: async (
+    data: CreateWorkspaceFromPrBody
+  ): Promise<Result<CreateWorkspaceFromPrResponse, CreateFromPrError>> => {
+    const response = await makeRequest('/api/task-attempts/from-pr', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return handleApiResponseAsResult<
+      CreateWorkspaceFromPrResponse,
+      CreateFromPrError
+    >(response);
+  },
 };
 
 // Execution Process APIs
@@ -883,6 +904,22 @@ export const repoApi = {
       options
     );
     return handleApiResponse<SearchResult[]>(response);
+  },
+
+  listOpenPrs: async (
+    repoId: string,
+    remoteName?: string
+  ): Promise<Result<OpenPrInfo[], ListPrsError>> => {
+    const params = remoteName
+      ? `?remote=${encodeURIComponent(remoteName)}`
+      : '';
+    const response = await makeRequest(`/api/repos/${repoId}/prs${params}`);
+    return handleApiResponseAsResult<OpenPrInfo[], ListPrsError>(response);
+  },
+
+  listRemotes: async (repoId: string): Promise<GitRemote[]> => {
+    const response = await makeRequest(`/api/repos/${repoId}/remotes`);
+    return handleApiResponse<GitRemote[]>(response);
   },
 };
 
@@ -1311,6 +1348,21 @@ export const scratchApi = {
     `/api/scratch/${scratchType}/${id}/stream/ws`,
 };
 
+// Agents API
+export const agentsApi = {
+  getSlashCommandsStreamUrl: (
+    agent: BaseCodingAgent,
+    opts?: { workspaceId?: string; repoId?: string }
+  ): string => {
+    const params = new URLSearchParams();
+    params.set('executor', agent);
+    if (opts?.workspaceId) params.set('workspace_id', opts.workspaceId);
+    if (opts?.repoId) params.set('repo_id', opts.repoId);
+
+    return `/api/agents/slash-commands/ws?${params.toString()}`;
+  },
+};
+
 // Queue API for session follow-up messages
 export const queueApi = {
   /**
@@ -1318,7 +1370,7 @@ export const queueApi = {
    */
   queue: async (
     sessionId: string,
-    data: { message: string; variant: string | null }
+    data: { message: string; executor_profile_id: ExecutorProfileId }
   ): Promise<QueueStatus> => {
     const response = await makeRequest(`/api/sessions/${sessionId}/queue`, {
       method: 'POST',
