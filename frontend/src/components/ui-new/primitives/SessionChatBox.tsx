@@ -9,6 +9,7 @@ import {
   ChatCircleIcon,
   TrashIcon,
   WarningIcon,
+  ArrowUpIcon,
 } from '@phosphor-icons/react';
 import { useTranslation } from 'react-i18next';
 import type {
@@ -147,6 +148,7 @@ interface SessionChatBoxProps {
   inProgressTodo?: TodoItem | null;
   localImages?: LocalImageMetadata[];
   onViewCode?: () => void;
+  onScrollToPreviousMessage?: () => void;
   tokenUsageInfo?: TokenUsageInfo | null;
   dropzone?: DropzoneProps;
 }
@@ -176,6 +178,7 @@ export function SessionChatBox({
   inProgressTodo,
   localImages,
   onViewCode,
+  onScrollToPreviousMessage,
   tokenUsageInfo,
   dropzone,
 }: SessionChatBoxProps) {
@@ -510,6 +513,7 @@ export function SessionChatBox({
       disabled={isDisabled}
       workspaceId={workspaceId}
       projectId={projectId}
+      executor={agent || executor?.selected}
       autoFocus={true}
       focusKey={focusKey}
       variant={variant}
@@ -560,19 +564,23 @@ export function SessionChatBox({
                 <>
                   {stats?.hasConflicts && (
                     <span
-                      className="flex items-center gap-1 text-warning text-sm"
+                      className="flex items-center gap-1 text-warning text-sm min-w-0"
                       title={t('conversation.approval.conflictWarning')}
                     >
-                      <WarningIcon className="size-icon-sm" />
-                      <span>
+                      <WarningIcon className="size-icon-sm flex-shrink-0" />
+                      <span className="truncate">
                         {t('conversation.approval.conflicts', {
                           count: stats.conflictedFilesCount,
                         })}
                       </span>
                     </span>
                   )}
-                  <PrimaryButton variant="tertiary" onClick={onViewCode}>
-                    <span className="text-sm space-x-half">
+                  <PrimaryButton
+                    variant="tertiary"
+                    onClick={onViewCode}
+                    className="min-w-0"
+                  >
+                    <span className="text-sm space-x-half whitespace-nowrap truncate">
                       <span>
                         {t('diff.filesChanged', { count: filesChanged })}
                       </span>
@@ -597,9 +605,19 @@ export function SessionChatBox({
       }
       headerRight={
         <>
-          {/* Agent icon for existing session mode */}
+          {/* Scroll to previous user message button + Agent icon for existing session mode */}
           {!isNewSessionMode && (
-            <AgentIcon agent={agent} className="size-icon-xl" />
+            <>
+              {onScrollToPreviousMessage && (
+                <ToolbarIconButton
+                  icon={ArrowUpIcon}
+                  title={t('conversation.actions.scrollToPreviousMessage')}
+                  aria-label={t('conversation.actions.scrollToPreviousMessage')}
+                  onClick={onScrollToPreviousMessage}
+                />
+              )}
+              <AgentIcon agent={agent} className="size-icon-xl" />
+            </>
           )}
           {/* Todo progress popup - always rendered, disabled when no todos */}
           <TodoProgressPopup todos={todos ?? []} />
@@ -607,6 +625,7 @@ export function SessionChatBox({
           <ToolbarDropdown
             label={sessionLabel}
             disabled={isInFeedbackMode || isInEditMode || isInApprovalMode}
+            className="min-w-0 max-w-[120px]"
           >
             {/* New Session option */}
             <DropdownMenuItem
